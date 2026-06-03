@@ -24,18 +24,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      # 1. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           
-      # 2. Install dependencies (seperti menjalankan npm install di terminal Anda)
       - name: Install dependencies
         run: npm install
         
-      # 3. Lakukan proses Build 
+      # Proses Build dengan menyuntikkan rahasia Supabase yang sudah Anda buat
       - name: Build project
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build 
 
       - name: Setup Pages
@@ -44,7 +45,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # 4. UBAH PATH: Arahkan ke folder hasil build (Vite menggunakan 'dist', React App biasa menggunakan 'build')
           path: './dist'
           
       - name: Deploy to GitHub Pages
